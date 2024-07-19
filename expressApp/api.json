@@ -1,0 +1,28 @@
+{
+    "post /register": [
+        "username",
+        "email",
+        "password"
+    ],
+    "post /login": [
+        "email",
+        "password"
+    ],
+    "get /users": [],
+    "get /users/:id": [],
+    "post /initializecontest": [
+        "hostid",
+        "opponentid",
+        "wagerAmoount",
+        "game"
+    ],
+    "get /contest": [],
+    "get /contests/:id": [],
+    "post /initializetransaction": [
+        "contestid",
+        "winnerid"
+    ],
+    "get /transactions": []
+}
+
+// http://185.170.196.10:5000/contests. An example of a request. There isn't a domain name, just ipv4 address. Domain name would have cost more.
