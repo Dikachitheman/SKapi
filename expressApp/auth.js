@@ -27,7 +27,7 @@ const secret = 'your_very_secret_key';
 
 // Register a new user
 app.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { firstname, lastname, email, phonenumber, pin, password } = req.body;
 
   // Check if user already exists
   const existingUser = await User.findOne({ email });
@@ -42,6 +42,7 @@ app.post('/register', async (req, res) => {
     lastname,
     email,
     phonenumber,
+    pin,
     password: hashedPassword,
   });
 
