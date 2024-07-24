@@ -34,6 +34,12 @@ const userSchema = new mongoose.Schema({
         required: false,
         default: 100,
     },
+    wins: {
+        type: Number,
+        required: false,
+        unique: false,
+        default: 0
+    }
 })
 
 const User = mongoose.model('User', userSchema)

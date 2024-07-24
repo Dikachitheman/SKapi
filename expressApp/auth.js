@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt'); // Password hashing
 const User = require('./models/user'); // Import user model
 const Contest = require('./models/contests')
 const Transaction = require('./models/transaction')
+const Notification = require('./models/notifications')
 
 const app = express();
 const port = process.env.PORT || 5000; // Use environment variable for port
@@ -24,6 +25,25 @@ mongoose.connect('mongodb+srv://dikachianosike:dikachi@skbackend.uqcdxzl.mongodb
 
 // Secret key for JWT signing (replace with a strong, unique secret)
 const secret = 'your_very_secret_key';
+
+
+const createNotification = async (userid, info) => {
+  const newNotification = new Notification({
+    userid,
+    info
+  })
+
+  try {
+    const savedNotification = await newNotification.save();
+    console.log({ message: 'Notification created successfully', status: true });
+    return (0)
+  } catch (err) {
+    console.log('Error creating Notification');
+    console.log(err)
+    return (1)
+  }
+}
+
 
 // Register a new user
 app.post('/register', async (req, res) => {
@@ -181,6 +201,285 @@ app.post('/initializecontest', async (req, res) => {
 
 })
 
+app.post("/deposit", (req, res) => {
+  const params = JSON.stringify(req.body)
+    
+  const options = {
+    hostname: 'api.paystack.co',
+    port: 443,
+    path: '/transaction/initialize',
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553',
+      'Content-Type': 'application/json'
+    }
+  }
+  
+  const request = https.request(options, res => {
+    let data = ''
+  
+    res.on('data', (chunk) => {
+      data += chunk
+    });
+  
+    res.on('end', () => {
+      console.log(JSON.parse(data))
+    })
+  }).on('error', error => {
+    console.error(error)
+  })
+  
+  request.write(params)
+  request.end()
+})
+
+app.get("/verify", (req, res) => {
+
+  const options = {
+    hostname: 'api.paystack.co',
+    port: 443,
+    path: '/transaction/verify/:reference',
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553'
+    }
+  }
+
+  https.request(options, res => {
+    let data = ''
+
+    res.on('data', (chunk) => {
+      data += chunk
+    });
+
+    res.on('end', () => {
+      console.log(JSON.parse(data))
+    })
+  }).on('error', error => {
+    console.error(error)
+  })
+
+})
+
+app.post("/recipient", (req, res) => {
+
+    const https = require('https')
+
+    const params = JSON.stringify({
+      "type": "nuban",
+      "name": "Tolu Robert",
+      "account_number": "01000000010",
+      "bank_code": "058",
+      "currency": "NGN"
+    })
+
+    // const params = JSON.stringify(req.body)
+
+    const options = {
+      hostname: 'api.paystack.co',
+      port: 443,
+      path: '/transferrecipient',
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553',
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const req = https.request(options, res => {
+      let data = ''
+
+      res.on('data', (chunk) => {
+        data += chunk
+      });
+
+      res.on('end', () => {
+        console.log(JSON.parse(data))
+      })
+    }).on('error', error => {
+      console.error(error)
+    })
+
+    req.write(params)
+    req.end()
+  }
+)
+
+app.get("/recipient", (req, res) => {
+  const https = require('https')
+
+  const options = {
+    hostname: 'api.paystack.co',
+    port: 443,
+    path: '/transferrecipient',
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer SECRET_KEY'
+    }
+  }
+})
+
+app.get("/recipient/:id", (req, res) => {
+  const https = require('https')
+
+  const options = {
+    hostname: 'api.paystack.co',
+    port: 443,
+    path: '/transferrecipient/:id_or_code',
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer SECRET_KEY'
+    }
+  }
+
+  https.request(options, res => {
+    let data = ''
+
+    res.on('data', (chunk) => {
+      data += chunk
+    });
+
+    res.on('end', () => {
+      console.log(JSON.parse(data))
+    })
+  }).on('error', error => {
+    console.error(error)
+  })
+})
+
+app.post("withdraw-new", (req, res) => {
+  const https = require('https')
+
+  const params = JSON.stringify({
+    "source": "balance", 
+    "reason": "Calm down", 
+    "amount":3794800, 
+    "recipient": "RCP_gx2wn530m0i3w3m"
+  })
+
+  const options = {
+    hostname: 'api.paystack.co',
+    port: 443,
+    path: '/transfer',
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer SECRET_KEY',
+      'Content-Type': 'application/json'
+    }
+  }
+
+  const req = https.request(options, res => {
+    let data = ''
+
+    res.on('data', (chunk) => {
+      data += chunk
+    });
+
+    res.on('end', () => {
+      console.log(JSON.parse(data))
+    })
+  }).on('error', error => {
+    console.error(error)
+  })
+
+  req.write(params)
+  req.end()
+})
+
+app.post("/finalize-withdrawal", (req, res) => {
+  const https = require('https')
+
+  const params = JSON.stringify({
+    "transfer_code": "TRF_vsyqdmlzble3uii", 
+    "otp": "928783"
+  })
+
+  const options = {
+    hostname: 'api.paystack.co',
+    port: 443,
+    path: '/transfer/finalize_transfer',
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer SECRET_KEY',
+      'Content-Type': 'application/json'
+    }
+  }
+
+  const req = https.request(options, res => {
+    let data = ''
+
+    res.on('data', (chunk) => {
+      data += chunk
+    });
+
+    res.on('end', () => {
+      console.log(JSON.parse(data))
+    })
+  }).on('error', error => {
+    console.error(error)
+  })
+
+  req.write(params)
+  req.end()
+})
+
+app.post("/verify-withdrawal", (req, res) => {
+  const https = require('https')
+
+  const options = {
+    hostname: 'api.paystack.co',
+    port: 443,
+    path: '/transfer/verify/:reference',
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer SECRET_KEY'
+    }
+  }
+  
+  https.request(options, res => {
+    let data = ''
+  
+    res.on('data', (chunk) => {
+      data += chunk
+    });
+  
+    res.on('end', () => {
+      console.log(JSON.parse(data))
+    })
+  }).on('error', error => {
+    console.error(error)
+  })
+})
+
+app.post('/withdraw', async (req, res) => {
+  const { userid, amount, bankname, accountnumber } = req.body;
+
+  // Find user by email
+  const userdata = await User.findById( userid );
+  if (!userdata) return res.status(401).send('Invalid email or password');
+
+  const sender = "SkillGap"
+  const receiver = userdata.firstname
+
+  const newTransaction = new Transaction({
+    sender,
+    receiver,
+    amount: amount,
+    bankname,
+    accountnumber
+  })
+
+  try {
+    const savedTransaction = await newTransaction.save();
+    res.json({ message: 'Transaction created successfully', status: true });
+
+  } catch (err) {
+    res.status(400).send('Error creating transaction');
+    console.log(err)
+  }
+
+})
+
 app.get('/contests', async (req, res) => {
   try {
     const contests = await Contest.find({}); // Find all users
@@ -189,10 +488,73 @@ app.get('/contests', async (req, res) => {
       return res.status(404).json({ message: 'No contest found' });
     }
 
+    try {
+      const info = "new notification"
+      const userid = "66675f2c18a493fa95368f54"
+
+      let n = 0
+      n = await createNotification(userid, info)
+
+      if ( n == 1 ) {
+        console.log ("error creating notification")
+      }
+
+    } catch(err) {
+      console.log(err)
+    }
+
     res.status(200).json(contests);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/notifications', async (req, res) => {
+  try {
+    const notifications = await Notification.find({}); // Find all notifications
+
+    if (!notifications) {
+      return res.status(404).json({ message: 'No notifications found' });
+    }
+
+    res.status(200).json(notifications);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
+app.get('/notifications/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const notification = await Notification.find({
+      userid: userId ,
+    });
+
+    res.json(notification);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching notification' });
+  }
+})
+
+app.get('/contests/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const contest = await Contest.find({
+      $or: [
+        { host: userId },
+        { opponent: userId },
+      ],
+    });
+
+    res.json(contest);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching contest' });
   }
 });
 
@@ -294,6 +656,14 @@ app.post('/initializetransaction', async (req, res) => {
     }
   }
 
+  try {
+    const user = await User.findByIdAndUpdate(winnerid, { $inc: { wins: amount } }, { new: true });
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error increasing number field' });
+  }
+
 })
 
 app.get("/transactions", async (req, res) => {
@@ -313,5 +683,35 @@ app.get("/transactions", async (req, res) => {
   }
 
 })
+
+app.get('/transactions/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const transactions = await Transaction.find({
+      $or: [
+        { sender: userId },
+        { receiver: userId },
+      ],
+    });
+
+    res.json(transactions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching transactions' });
+  }
+});
+
+app.get('/leaderboard', async (req, res) => {
+  try {
+    const users = await User.find().sort({ wins: 1 }); 
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error fetching users' });
+  }
+});
+
+
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
