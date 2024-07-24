@@ -263,17 +263,17 @@ app.get("/verify", (req, res) => {
 
 app.post("/recipient", (req, res) => {
 
-    const https = require('https')
+    // const https = require('https')
 
-    const params = JSON.stringify({
-      "type": "nuban",
-      "name": "Tolu Robert",
-      "account_number": "01000000010",
-      "bank_code": "058",
-      "currency": "NGN"
-    })
+    // const params = JSON.stringify({
+    //   "type": "nuban",
+    //   "name": "Tolu Robert",
+    //   "account_number": "01000000010",
+    //   "bank_code": "058",
+    //   "currency": "NGN"
+    // })
 
-    // const params = JSON.stringify(req.body)
+    const params = JSON.stringify(req.body)
 
     const options = {
       hostname: 'api.paystack.co',
@@ -286,7 +286,7 @@ app.post("/recipient", (req, res) => {
       }
     }
 
-    const req = https.request(options, res => {
+    const request = https.request(options, res => {
       let data = ''
 
       res.on('data', (chunk) => {
@@ -300,8 +300,8 @@ app.post("/recipient", (req, res) => {
       console.error(error)
     })
 
-    req.write(params)
-    req.end()
+    request.write(params)
+    request.end()
   }
 )
 
@@ -314,7 +314,7 @@ app.get("/recipient", (req, res) => {
     path: '/transferrecipient',
     method: 'GET',
     headers: {
-      Authorization: 'Bearer SECRET_KEY'
+      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553'
     }
   }
 })
@@ -348,14 +348,16 @@ app.get("/recipient/:id", (req, res) => {
 })
 
 app.post("withdraw-new", (req, res) => {
-  const https = require('https')
+  // const https = require('https')
 
-  const params = JSON.stringify({
-    "source": "balance", 
-    "reason": "Calm down", 
-    "amount":3794800, 
-    "recipient": "RCP_gx2wn530m0i3w3m"
-  })
+  // const params = JSON.stringify({
+  //   "source": "balance", 
+  //   "reason": "Calm down", 
+  //   "amount":3794800, 
+  //   "recipient": "RCP_gx2wn530m0i3w3m"
+  // })
+
+  const params = JSON.stringify(req.body)
 
   const options = {
     hostname: 'api.paystack.co',
@@ -363,7 +365,7 @@ app.post("withdraw-new", (req, res) => {
     path: '/transfer',
     method: 'POST',
     headers: {
-      Authorization: 'Bearer SECRET_KEY',
+      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553',
       'Content-Type': 'application/json'
     }
   }
@@ -387,12 +389,14 @@ app.post("withdraw-new", (req, res) => {
 })
 
 app.post("/finalize-withdrawal", (req, res) => {
-  const https = require('https')
+  // const https = require('https')
 
-  const params = JSON.stringify({
-    "transfer_code": "TRF_vsyqdmlzble3uii", 
-    "otp": "928783"
-  })
+  // const params = JSON.stringify({
+  //   "transfer_code": "TRF_vsyqdmlzble3uii", 
+  //   "otp": "928783"
+  // })
+
+  const params = JSON.stringify(req.body)
 
   const options = {
     hostname: 'api.paystack.co',
@@ -400,7 +404,7 @@ app.post("/finalize-withdrawal", (req, res) => {
     path: '/transfer/finalize_transfer',
     method: 'POST',
     headers: {
-      Authorization: 'Bearer SECRET_KEY',
+      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553',
       'Content-Type': 'application/json'
     }
   }
@@ -424,7 +428,7 @@ app.post("/finalize-withdrawal", (req, res) => {
 })
 
 app.post("/verify-withdrawal", (req, res) => {
-  const https = require('https')
+  // const https = require('https')
 
   const options = {
     hostname: 'api.paystack.co',
