@@ -370,7 +370,7 @@ app.post("withdraw-new", (req, res) => {
     }
   }
 
-  const req = https.request(options, res => {
+  const request = https.request(options, res => {
     let data = ''
 
     res.on('data', (chunk) => {
@@ -384,8 +384,8 @@ app.post("withdraw-new", (req, res) => {
     console.error(error)
   })
 
-  req.write(params)
-  req.end()
+  request.write(params)
+  request.end()
 })
 
 app.post("/finalize-withdrawal", (req, res) => {
@@ -409,7 +409,7 @@ app.post("/finalize-withdrawal", (req, res) => {
     }
   }
 
-  const req = https.request(options, res => {
+  const request = https.request(options, res => {
     let data = ''
 
     res.on('data', (chunk) => {
@@ -423,8 +423,8 @@ app.post("/finalize-withdrawal", (req, res) => {
     console.error(error)
   })
 
-  req.write(params)
-  req.end()
+  request.write(params)
+  request.end()
 })
 
 app.post("/verify-withdrawal", (req, res) => {
