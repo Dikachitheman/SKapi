@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express')
 const cors = require('cors'); // Enable CORS for front-end requests
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose'); // Database connection
@@ -168,7 +168,7 @@ app.get('/users/:id', async (req, res) => {
 });
 
 app.post('/initializecontest', async (req, res) => {
-  const { hostid, opponentid, wagerAmount, game } = req.body;
+  const { hostid, opponentid, wagerAmount, game, imageUrl } = req.body;
 
   // Find user by email
   const hostdata = await User.findById( hostid );

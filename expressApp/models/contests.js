@@ -19,6 +19,10 @@ const contestSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    imageUrl: {
+        type: String,
+        required: false
+    },
     winner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
