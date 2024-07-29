@@ -269,6 +269,11 @@ cors@^2.8.5:
     object-assign "^4"
     vary "^1"
 
+crypto@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/crypto/-/crypto-1.0.1.tgz"
+  integrity sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==
+
 dashdash@^1.12.0:
   version "1.14.1"
   resolved "https://registry.npmjs.org/dashdash/-/dashdash-1.14.1.tgz"
@@ -960,6 +965,11 @@ node-fetch@^2.6.7:
   integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==
   dependencies:
     whatwg-url "^5.0.0"
+
+nodemailer@^6.9.14:
+  version "6.9.14"
+  resolved "https://registry.npmjs.org/nodemailer/-/nodemailer-6.9.14.tgz"
+  integrity sha512-Dobp/ebDKBvz91sbtRKhcznLThrKxKt97GI2FAlAyy+fk19j73Uz3sBXolVtmcXjaorivqsbbbjDY+Jkt4/bQA==
 
 nopt@^5.0.0:
   version "5.0.0"

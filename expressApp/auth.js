@@ -4,8 +4,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose'); // Database connection
 const jwt = require('jsonwebtoken'); // JSON Web Token library
 const bcrypt = require('bcrypt'); // Password hashing
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
-// Database models (replace with your schema)
 const User = require('./models/user'); // Import user model
 const Contest = require('./models/contests')
 const Transaction = require('./models/transaction')
@@ -14,16 +15,13 @@ const Notification = require('./models/notifications')
 const app = express();
 const port = process.env.PORT || 5000; // Use environment variable for port
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Connect to MongoDB database (replace with your connection string)
 mongoose.connect('mongodb+srv://dikachianosike:dikachi@skbackend.uqcdxzl.mongodb.net/?retryWrites=true&w=majority&appname=SKbackend', {})
 .then(() => console.log('MongoDB connected successfully'))
 .catch(err => console.error('MongoDB connection error:', err));
 
-// Secret key for JWT signing (replace with a strong, unique secret)
 const secret = 'your_very_secret_key';
 
 
@@ -44,8 +42,6 @@ const createNotification = async (userid, info) => {
   }
 }
 
-
-// Register a new user
 app.post('/register', async (req, res) => {
   const { firstname, lastname, email, phonenumber, pin, password } = req.body;
 
@@ -74,7 +70,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Login and generate JWT
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -99,7 +94,6 @@ app.post('/login', async (req, res) => {
   });
 });
 
-// Authorization middleware (replace with specific authorization logic based on JWT and user roles)
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -120,7 +114,6 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// Protected route example (replace with actual protected routes)
 app.get('/protected', verifyToken, (req, res) => {
   res.send('This is a protected route!');
 });
@@ -141,11 +134,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
-// Inside your Express server file (e.g., server.js)
 
-// Assuming you have already connected to MongoDB and defined the User schema
-
-// Route to get a user by ID
 app.get('/users/:id', async (req, res) => {
   const { id } = req.params; // Get user ID from request parameter
 
@@ -716,6 +705,83 @@ app.get('/leaderboard', async (req, res) => {
   }
 });
 
+const otpStore = new Map();
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'aubreyskillgap@gmail.com',
+    pass: 'aubreyskpassword'
+  }
+});
+
+app.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  
+  const otp = crypto.randomInt(100000, 999999).toString();
+  
+  otpStore.set(email, { otp, expiry: Date.now() + 10 * 60 * 1000 }); // 10 minutes expiry
+  
+  // Send OTP via email
+  const mailOptions = {
+    from: 'your-email@gmail.com',
+    to: email,
+    subject: 'Password Recovery OTP',
+    text: `Your OTP for password recovery is: ${otp}`
+  };
+  
+  try {
+    await transporter.sendMail(mailOptions);
+    res.json({ message: 'OTP sent to email' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send OTP' });
+  }
+});
+
+app.post('/verify-otp', (req, res) => {
+  const { email, otp } = req.body;
+  
+  const storedOTP = otpStore.get(email);
+  
+  if (!storedOTP || storedOTP.otp !== otp || Date.now() > storedOTP.expiry) {
+    return res.status(400).json({ error: 'Invalid or expired OTP' });
+  }
+  
+  res.json({ message: 'OTP verified successfully' });
+});
+
+// Reset password route
+app.post('/reset-password', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({
+      email
+    })
+
+    if (!user) {
+      return res.status(400).json({error: 'email not found'})
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+    user.password = hashedPassword
+    
+    await user.save()
+
+    res.json({ message: 'password reset successfully' })
+  } catch (error) {
+    console.error('Error resetting password: ', error)
+    res.status(500).json({error: 'Failed to reset password'})
+  }
+
+  otpStore.delete(email);
+  
+  res.json({ message: 'Password reset successfully' });
+});
+
+module.exports = router;
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
