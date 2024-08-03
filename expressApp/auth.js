@@ -43,7 +43,7 @@ const createNotification = async (userid, info) => {
 }
 
 app.post('/register', async (req, res) => {
-  const { firstname, lastname, email, phonenumber, pin, password } = req.body;
+  const { firstname, lastname, username, imageUrl, email, phonenumber, pin, password } = req.body;
 
   // Check if user already exists
   const existingUser = await User.findOne({ email });

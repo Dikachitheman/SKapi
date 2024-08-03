@@ -5,6 +5,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        required: true
+    },
+    imageUrl: {
+        type: String,
+        required: false
+    },
     lastname: {
         type: String,
         required: true
