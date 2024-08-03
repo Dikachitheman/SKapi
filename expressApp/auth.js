@@ -23,7 +23,7 @@ mongoose.connect('mongodb+srv://dikachianosike:dikachi@skbackend.uqcdxzl.mongodb
 .catch(err => console.error('MongoDB connection error:', err));
 
 const secret = 'your_very_secret_key';
-
+const SECRET_KEY = "sk_test_fce28c55a96e574a3f2c25d693a1249540807aa9"
 
 const createNotification = async (userid, info) => {
   const newNotification = new Notification({
@@ -199,7 +199,7 @@ app.post("/deposit", (req, res) => {
     path: '/transaction/initialize',
     method: 'POST',
     headers: {
-      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553',
+      Authorization: `Bearer ${SECRET_KEY}`,
       'Content-Type': 'application/json'
     }
   }
@@ -230,7 +230,7 @@ app.get("/verify", (req, res) => {
     path: '/transaction/verify/:reference',
     method: 'GET',
     headers: {
-      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553'
+      Authorization: `Bearer ${SECRET_KEY}`
     }
   }
 
@@ -270,7 +270,7 @@ app.post("/recipient", (req, res) => {
       path: '/transferrecipient',
       method: 'POST',
       headers: {
-        Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553',
+        Authorization: `Bearer ${SECRET_KEY}`,
         'Content-Type': 'application/json'
       }
     }
@@ -303,7 +303,7 @@ app.get("/recipient", (req, res) => {
     path: '/transferrecipient',
     method: 'GET',
     headers: {
-      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553'
+      Authorization: `Bearer ${SECRET_KEY}`
     }
   }
 })
@@ -354,7 +354,7 @@ app.post("withdraw-new", (req, res) => {
     path: '/transfer',
     method: 'POST',
     headers: {
-      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553',
+      Authorization: `Bearer ${SECRET_KEY}`,
       'Content-Type': 'application/json'
     }
   }
@@ -393,7 +393,7 @@ app.post("/finalize-withdrawal", (req, res) => {
     path: '/transfer/finalize_transfer',
     method: 'POST',
     headers: {
-      Authorization: 'Bearer sk_test_6a39ee59195e667ab0d074b266e2455bb6ace553',
+      Authorization: `Bearer ${SECRET_KEY}`,
       'Content-Type': 'application/json'
     }
   }
@@ -724,7 +724,7 @@ app.post('/forgot-password', async (req, res) => {
   
   // Send OTP via email
   const mailOptions = {
-    from: 'your-email@gmail.com',
+    from: 'aubreyskillgap@gmail.com',
     to: email,
     subject: 'Password Recovery OTP',
     text: `Your OTP for password recovery is: ${otp}`
@@ -781,7 +781,5 @@ app.post('/reset-password', async (req, res) => {
   
   res.json({ message: 'Password reset successfully' });
 });
-
-module.exports = router;
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
