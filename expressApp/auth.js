@@ -157,6 +157,23 @@ app.get('/users/:id', async (req, res) => {
   }
 });
 
+app.get('/users/:username', async (req, res) => {
+  const { username } = req.params; // Get user ID from request parameter
+
+  try {
+    const user = await User.findOne({username}); // Find user by ID
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 app.post('/initializecontest', async (req, res) => {
   const { hostid, opponentid, wagerAmount, game, imageUrl } = req.body;
 
