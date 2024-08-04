@@ -175,7 +175,7 @@ app.get('/users/:username', async (req, res) => {
 });
 
 app.post('/initializecontest', async (req, res) => {
-  const { hostid, opponentid, wagerAmount, game, imageUrl } = req.body;
+  const { hostid, opponentid, wagerAmount, game, imageUrl, isPrivate } = req.body;
 
   // Find user by email
   const hostdata = await User.findById( hostid );
@@ -185,8 +185,8 @@ app.post('/initializecontest', async (req, res) => {
   const opponentdata = await User.findById( opponentid );
   if (!opponentdata) return res.status(401).send('Invalid email or password');
 
-  host = hostdata._id
-  opponent = opponentdata._id
+  const host = hostdata._id
+  const opponent = opponentdata._id
 
   console.log(host)
   console.log(opponent)
@@ -195,7 +195,9 @@ app.post('/initializecontest', async (req, res) => {
     host,
     opponent,
     wagerAmount,
-    game
+    game,
+    imageUrl,
+    isPrivate,
   });
 
   try {

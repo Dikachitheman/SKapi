@@ -33,6 +33,11 @@ const contestSchema = new mongoose.Schema({
         default: false,
         required: false
     },
+    isPrivate: {
+        type: Boolean,
+        default: false,
+        required: false
+    },
     createdAt: {
         type: Date,
         default: Date.now
