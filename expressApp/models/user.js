@@ -47,7 +47,13 @@ const userSchema = new mongoose.Schema({
         required: false,
         unique: false,
         default: 0
-    }
+    },
+    losses: {
+        type: Number,
+        required: false,
+        unique: false,
+        default: 0
+    },
 })
 
 const User = mongoose.model('User', userSchema)

@@ -25,9 +25,10 @@ mongoose.connect('mongodb+srv://dikachianosike:dikachi@skbackend.uqcdxzl.mongodb
 const secret = 'your_very_secret_key';
 const SECRET_KEY = "sk_test_fce28c55a96e574a3f2c25d693a1249540807aa9"
 
-const createNotification = async (userid, info) => {
+const createNotification = async (userid, header, info) => {
   const newNotification = new Notification({
     userid,
+    header,
     info
   })
 
@@ -483,10 +484,11 @@ app.get('/contests', async (req, res) => {
 
     try {
       const info = "new notification"
+      const header = "Congratulations"
       const userid = "66675f2c18a493fa95368f54"
 
       let n = 0
-      n = await createNotification(userid, info)
+      n = await createNotification(userid, header, info)
 
       if ( n == 1 ) {
         console.log ("error creating notification")
@@ -650,8 +652,9 @@ app.post('/initializetransaction', async (req, res) => {
   }
 
   try {
-    const user = await User.findByIdAndUpdate(winnerid, { $inc: { wins: amount } }, { new: true });
-    res.json(user);
+    const userW = await User.findByIdAndUpdate(winner, { $inc: { wins: 1 } }, { new: true });
+    const userO = await User.findByIdAndUpdate(sender, { $inc: { losses: 1 } }, { new: true });
+    // res.json(user);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error increasing number field' });
