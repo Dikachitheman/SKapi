@@ -57,8 +57,10 @@ app.post('/register', async (req, res) => {
   const newUser = new User({
     firstname,
     lastname,
+    username,
     email,
     phonenumber,
+    imageUrl,
     pin,
     password: hashedPassword,
   });
