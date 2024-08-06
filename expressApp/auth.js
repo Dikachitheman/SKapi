@@ -181,11 +181,11 @@ app.post('/initializecontest', async (req, res) => {
 
   // Find user by email
   const hostdata = await User.findById( hostid );
-  if (!hostdata) return res.status(401).send('Invalid email or password');
+  if (!hostdata) return res.status(401).send('Invalid hostid');
 
   // Find user by email
   const opponentdata = await User.findById( opponentid );
-  if (!opponentdata) return res.status(401).send('Invalid email or password');
+  if (!opponentdata) return res.status(401).send('Invalid opponentid');
 
   const host = hostdata._id
   const opponent = opponentdata._id
