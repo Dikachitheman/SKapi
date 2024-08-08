@@ -732,10 +732,12 @@ app.get('/leaderboard', async (req, res) => {
 const otpStore = new Map();
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'mx.mailslurp.com',
+  port: '2465',
+  secure: false,
   auth: {
-    user: 'aubreyskillgap@gmail.com',
-    pass: 'aubreyskpassword'
+    user: 'f0866afe-79c7-478b-a265-dad206d4af74',
+    pass: 'ezVAtLSKenO3QLBde0oiICyjQzPx87iO'
   }
 });
 
@@ -748,7 +750,7 @@ app.post('/forgot-password', async (req, res) => {
   
   // Send OTP via email
   const mailOptions = {
-    from: 'aubreyskillgap@gmail.com',
+    from: 'f0866afe-79c7-478b-a265-dad206d4af74@mailslurp.mx',
     to: email,
     subject: 'Password Recovery OTP',
     text: `Your OTP for password recovery is: ${otp}`
