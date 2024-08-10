@@ -639,10 +639,13 @@ app.post('/initializetransaction', async (req, res) => {
     // Debugging: Log session details
     console.log('Transaction started', session.transaction.number);
 
+    const minusTenPC = contestdata.wagerAmount - (10 / 100 * contestdata.wagerAmount)
+
+
     // Perform the balance updates within the transaction.
     const [debitUser, creditUser] = await Promise.all([
       User.findByIdAndUpdate(sender, { $inc: { balance: -contestdata.wagerAmount } }, { session, new: true }),
-      User.findByIdAndUpdate(winner, { $inc: { balance: contestdata.wagerAmount } }, { session, new: true }),
+      User.findByIdAndUpdate(winner, { $inc: { balance: minusTenPC } }, { session, new: true }),
     ]);
 
     // Check if both users were found and updated.
@@ -732,11 +735,11 @@ app.get('/leaderboard', async (req, res) => {
 const otpStore = new Map();
 
 const transporter = nodemailer.createTransport({
-  host: 'mx.mailslurp.com',
-  port: '2465',
+  host: 'mxslurp.click',
+  port: '2525',
   secure: false,
   auth: {
-    user: 'f0866afe-79c7-478b-a265-dad206d4af74',
+    user: 'f0866afe-79c7-478b-a265-dad206d4af74@mailslurp.mx',
     pass: 'ezVAtLSKenO3QLBde0oiICyjQzPx87iO'
   }
 });
