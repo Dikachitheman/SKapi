@@ -739,7 +739,7 @@ const transporter = nodemailer.createTransport({
   port: '2525',
   secure: false,
   auth: {
-    user: 'f0866afe-79c7-478b-a265-dad206d4af74@mailslurp.mx',
+    user: '972341d1-d621-44e2-a000-53ae91fd35a5@mailslurp.net',
     pass: 'ezVAtLSKenO3QLBde0oiICyjQzPx87iO'
   }
 });
@@ -753,7 +753,7 @@ app.post('/forgot-password', async (req, res) => {
   
   // Send OTP via email
   const mailOptions = {
-    from: 'f0866afe-79c7-478b-a265-dad206d4af74@mailslurp.mx',
+    from: '972341d1-d621-44e2-a000-53ae91fd35a5@mailslurp.net',
     to: email,
     subject: 'Password Recovery OTP',
     text: `Your OTP for password recovery is: ${otp}`
@@ -812,3 +812,5 @@ app.post('/reset-password', async (req, res) => {
 });
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
+
+// 185.170.196.10
