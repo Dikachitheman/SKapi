@@ -15,6 +15,10 @@ const contestSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    desc: {
+        type: String,
+        required: false
+    },
     wagerAmount: {
         type: Number,
         required: true

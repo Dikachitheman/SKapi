@@ -177,7 +177,7 @@ app.get('/users/:username', async (req, res) => {
 });
 
 app.post('/initializecontest', async (req, res) => {
-  const { hostid, opponentid, wagerAmount, game, imageUrl, isPrivate } = req.body;
+  const { hostid, opponentid, wagerAmount, game, desc, imageUrl, isPrivate } = req.body;
 
   // Find user by email
   const hostdata = await User.findById( hostid );
@@ -198,6 +198,7 @@ app.post('/initializecontest', async (req, res) => {
     opponent,
     wagerAmount,
     game,
+    desc,
     imageUrl,
     isPrivate,
   });
